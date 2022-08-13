@@ -33,10 +33,17 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-mongoose.connect(process.env.DB_URL, {useNewUrlParser: true}, ()=> {
-    console.log('DB Connected!'.bgCyan)
-})
-
+mongoose
+      .connect(process.env.DB_URL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      })
+      .then(() => {
+        console.log('Database connected successfully!');
+      })
+      .catch((err) => {
+        console.log('Error connecting with error code:', err);
+      });
 const userSchema = new mongoose.Schema({
     email: String,
     password: String,
@@ -241,6 +248,6 @@ app.post('/submit', (req,res)=>{
 })
 
 
-app.listen(process.env.PORT || 3000, ()=>{
+app.listen(process.env.PORT, ()=>{
     console.log(`Server is lit up at ${process.env.PORT}`.bgGreen);
 })
